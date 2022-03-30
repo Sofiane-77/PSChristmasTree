@@ -1,0 +1,15 @@
+site_name: PSChristmasTree Docs
+site_author: Sofiane-77
+repo_url: https://github.com/Sofiane-77/PSChristmasTree
+theme: readthedocs
+copyright: "PSChristmasTree is licensed under the <a href='https://github.com/Sofiane-77/PSChristmasTree/blob/main/LICENSE'>MIT license</a>"
+pages:
+  - Home: index.md
+  - Introduction:
+    - Prerequisites: prerequisites.md
+    - Installation: installation.md
+    - Getting Started: gettingstarted.md
+  - FAQ: FAQ.md
+  - Functions References:
+    - Show-PSChristmasTree: Show-PSChristmasTree.md
+  - How to contribute ?: how-to-contribute.md
