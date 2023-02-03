@@ -1,0 +1,23 @@
+labels: ["show-and-tell"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Showcase title
+      description: Give a short title to your creation.
+    validations:
+      required: true
+  - type: textarea
+    id: what_you_did
+    attributes:
+      label: What did you build or customize?
+      description: Describe your creation or customization. Include code snippets or screenshots if possible.
+      placeholder: |
+        Example: I added color gradients to the tree and made it display a custom message.
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Anything you'd like feedback on?
+      description: Let the community know if you're looking for comments, suggestions, or improvements.
