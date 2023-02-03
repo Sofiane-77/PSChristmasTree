@@ -1,0 +1,15 @@
+root: ./docs/
+
+structure:
+  - Home: index.md
+  - Introduction:
+    - Prerequisites: prerequisites.md
+    - Installation: installation.md
+    - Getting Started: gettingstarted.md
+  - FAQ: FAQ.md
+  - Functions References:
+    - Show-PSChristmasTree: Show-PSChristmasTree.md
+  - How to contribute ?: how-to-contribute.md
+
+#redirects:
+#  help: ./support.md
