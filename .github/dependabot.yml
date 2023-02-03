@@ -1,0 +1,38 @@
+version: 2
+updates:
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: "weekly"
+    time: "14:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  reviewers:
+    - "Sofiane-77"
+  commit-message:
+    prefix: ":lock:"
+  labels:
+    - "actions"
+    - "dependencies"
+  pull-request-branch-name:
+    separator: "/"
+  rebase-strategy: "auto"
+ 
+    
+- package-ecosystem: NuGet
+  directory: "/"
+  schedule:
+    interval: "weekly"
+    time: "14:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  reviewers:
+    - "Sofiane-77"
+  commit-message:
+    prefix: ":lock:"
+  labels:
+    - "nuget"
+    - "dependencies"
+  pull-request-branch-name:
+    separator: "/"
+  rebase-strategy: "auto"

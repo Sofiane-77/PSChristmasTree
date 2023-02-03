@@ -1,0 +1,64 @@
+labels: ["enhancement"]
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      description: "Please confirm you've done the following:"
+      options:
+        - label: I searched existing discussions and didn't find something similar
+          required: true
+        - label: My title is clear and descriptive
+          required: true
+        - label: I clearly explained the idea and why it matters
+          required: true
+  - type: textarea
+    id: feature-request
+    attributes:
+      label: What's your idea?
+      description: |
+        Is it a new decoration, animation, behavior, or something totally different?
+        Share your idea clearly so others can understand and discuss it.
+      placeholder: |
+        Example: Add falling snowflakes behind the tree in the terminal.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why do you want this?
+      description: |
+        What's the motivation? Is it to solve a problem, make the output cooler, or just for fun?
+        If it's related to another idea or issue, link it here.
+      placeholder: |
+        Example: I think snow would make the display more immersive and festive.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Do you have an idea of how to implement it?
+      description: |
+        (Optional) If you have a technical suggestion, design sketch, or example code, drop it here.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Have you considered alternatives?
+      description: |
+        (Optional) If you thought of other ways to achieve the same result, explain them here.
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you like to help make it happen?
+      options:
+        - 'No'
+        - "Yes, I'd like to help implement it"
+        - 'Yes, I can help test or review'
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: |
+        Add mockups, references, screenshots, vibes, or anything else that helps.
