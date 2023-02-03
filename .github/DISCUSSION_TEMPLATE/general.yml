@@ -1,0 +1,21 @@
+labels: ["general"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## General Discussion
+        Welcome! Use this space for open-ended conversations, feedback, community ideas, or anything that doesn't fit in other categories.
+  - type: "checkboxes"
+    id: "no-duplicates"
+    attributes:
+      label: "Please check for similar discussions first"
+      options:
+        - required: True
+          label: "I [searched](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/general) and couldn't find an appropriate discussion to participate in instead."
+  - type: "textarea"
+    id: "description"
+    validations:
+      required: True
+    attributes:
+      label: "Description"
+      description: "Please describe what you would like to discuss."
