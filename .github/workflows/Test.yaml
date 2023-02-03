@@ -1,0 +1,112 @@
+name: Run PSChristmasTree Tests
+on:
+  push:
+    paths:
+      - "PSChristmasTree/**"
+      - "Tests/**"
+      - "tools/**"
+      - "docs/UpdateDocs.ps1"
+      - "build.dependencies.psd1"
+      - "PSChristmasTree.build.ps1"
+      - ".github/workflows/Test.yaml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "PSChristmasTree/**"
+      - "Tests/**"
+      - "tools/**"
+      - "docs/UpdateDocs.ps1"
+      - "build.dependencies.psd1"
+      - "PSChristmasTree.build.ps1"
+      - ".github/workflows/Test.yaml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        include:
+          - os: ubuntu-latest
+            path: ~/.local/share/powershell/Modules
+          - os: macos-latest
+            path: ~/.local/share/powershell/Modules
+          - os: windows-latest
+            path: ~\Documents\PowerShell\Modules
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+      - name: Setup PowerShell module cache
+        if: contains(fromJson('["refs/heads/main"]'), github.ref)
+        id: cacher
+        uses: actions/cache@v5
+        with:
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS
+          restore-keys: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS
+      - name: Install PSScriptAnalyzer and Pester from PSGallery
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -RequiredVersion 1.25.0 -Force
+          Install-Module Pester -RequiredVersion 5.7.1 -Force
+          Install-Module platyPS -RequiredVersion 0.14.2 -Force
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          ./tools/Invoke-PSChristmasTreeTests.ps1 -Output Detailed -ResultFile ./Build/TestResults/pester-pwsh.xml
+      - name: Lint module folder with PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          ./tools/Invoke-PSChristmasTreeAnalyzer.ps1
+      - name: Check generated docs are up to date
+        shell: pwsh
+        run: |
+          ./tools/Test-PSChristmasTreeDocsSync.ps1
+      - name: Upload PowerShell 7 test results
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: pester-results-${{ matrix.os }}
+          path: Build/TestResults/pester-pwsh.xml
+          if-no-files-found: ignore
+
+  test-windows-powershell:
+    name: Run Windows PowerShell 5.1 validation
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+      - name: Install Windows PowerShell dependencies
+        shell: powershell
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -RequiredVersion 1.25.0 -Force
+          Install-Module Pester -RequiredVersion 5.7.1 -Force
+      - name: Run tests in Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          .\tools\Invoke-PSChristmasTreeTests.ps1 -Output Detailed -ResultFile .\Build\TestResults\pester-windows-powershell.xml
+      - name: Lint module folder in Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          .\tools\Invoke-PSChristmasTreeAnalyzer.ps1
+      - name: Upload Windows PowerShell test results
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: pester-results-windows-powershell
+          path: Build/TestResults/pester-windows-powershell.xml
+          if-no-files-found: ignore

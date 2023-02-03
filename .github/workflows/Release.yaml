@@ -1,0 +1,73 @@
+name: Release PSChristmasTree Module on GitHub
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Existing release tag to publish (for example v1.1.0.0)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag_name) || github.ref }}
+          fetch-depth: 0
+      - name: Validate tag and manifest version
+        shell: pwsh
+        run: |
+          $tagName = if ('${{ github.event_name }}' -eq 'workflow_dispatch') { '${{ inputs.tag_name }}' } else { '${{ github.ref_name }}' }
+          if ($tagName -notmatch '^v\d+\.\d+\.\d+\.\d+$') {
+            throw "Release workflow requires a semantic tag in the form vX.Y.Z.W. Received '$tagName'."
+          }
+
+          $tagVersion = $tagName.TrimStart('v')
+          $manifestVersion = (Test-ModuleManifest -Path 'PSChristmasTree/PSChristmasTree.psd1').Version.ToString()
+
+          if ($tagVersion -ne $manifestVersion) {
+            throw "Release version mismatch. Tag '$tagName' resolves to '$tagVersion', but PSChristmasTree/PSChristmasTree.psd1 declares ModuleVersion '$manifestVersion'. Update the manifest version before tagging (or tag the commit that already contains the correct manifest version)."
+          }
+
+          Write-Host "Version check passed: tag '$tagName' matches ModuleVersion '$manifestVersion'."
+      - name: Install InvokeBuild from PowerShell Gallery
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module InvokeBuild -RequiredVersion 5.14.23 -Force
+      - name: Build release artifacts
+        shell: pwsh
+        run: |
+          Invoke-Build CIBuild -Configuration "Release" -Verbose
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: false
+          prerelease: false
+          name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.ref_name }}
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.ref_name }}
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          files: |
+            Build/Release/PSChristmasTree/*.zip
+
+      - name: Dispatch PowerShell Gallery publish workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.ref_name }}
+        shell: bash
+        run: |
+          gh workflow run Publish.yaml \
+            --ref main \
+            -f tag_name="$TAG_NAME"

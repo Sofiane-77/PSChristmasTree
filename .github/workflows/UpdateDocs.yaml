@@ -1,0 +1,37 @@
+name: Update Markdown Help
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - PSChristmasTree/Public/**.ps1
+      - PSChristmasTree/PSChristmasTree.psd1
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-docs:
+    name: Regenerate platyPS markdown help
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install platyPS
+        shell: pwsh
+        run: Install-Module platyPS -Scope CurrentUser -Force -SkipPublisherCheck
+
+      - name: Regenerate markdown help
+        shell: pwsh
+        run: ./docs/UpdateDocs.ps1 -Verbose
+
+      - name: Commit updated docs
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "docs: regenerate markdown help [skip ci]"
+          file_pattern: docs/*.md

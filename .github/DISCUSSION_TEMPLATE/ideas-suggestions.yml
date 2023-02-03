@@ -1,0 +1,80 @@
+title: "[Idea] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to improve **PSChristmasTree**? 🎁
+
+        Use this category for:
+        - new features
+        - quality-of-life improvements
+        - animation ideas
+        - decoration ideas
+        - UX or customization suggestions
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing discussions and did not find the same idea
+          required: true
+        - label: I used a clear and descriptive title
+          required: true
+        - label: I explained why this idea would be useful
+          required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Idea summary
+      description: Describe the feature or improvement in a few clear sentences.
+      placeholder: |
+        Example: Add an optional snowfall animation behind the tree.
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Explain the need, limitation, or opportunity behind the idea.
+      placeholder: |
+        Example: The current output looks great, but there is no background effect to make the animation feel more dynamic.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe how you think this should work from a user point of view.
+      placeholder: |
+        Example: Add a -Snow switch to display snowflakes during the animation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any alternative approaches or related ideas you considered.
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you interested in contributing?
+      options:
+        - No
+        - Yes, I can help implement it
+        - Yes, I can help test it
+        - Yes, I can help refine the idea
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Extra context
+      description: Add mockups, examples, references, screenshots, or anything useful.

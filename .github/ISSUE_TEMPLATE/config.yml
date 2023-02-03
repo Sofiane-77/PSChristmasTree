@@ -1,0 +1,21 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question in Discussions ❓
+    url: https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/q-a
+    about: Use Discussions for usage questions, troubleshooting help, and general support.
+
+  - name: Share an idea or suggestion ✨
+    url: https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/ideas-suggestions
+    about: Use Discussions for feature ideas, UX suggestions, and improvements.
+
+  - name: Show and Tell 🎄
+    url: https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/show-and-tell
+    about: Share your setup, scripts, screenshots, or customizations with the community.
+
+  - name: Read the documentation 📘
+    url: https://sofiane-77.github.io/PSChristmasTree/
+    about: Check the documentation before opening an issue.
+
+  - name: Report a security vulnerability 🔒
+    url: https://github.com/Sofiane-77/PSChristmasTree/blob/main/.github/SECURITY.md
+    about: Do not open a public issue for security vulnerabilities. Follow the private disclosure process described in SECURITY.md.

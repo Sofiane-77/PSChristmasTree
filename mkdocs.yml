@@ -1,0 +1,31 @@
+site_name: PSChristmasTree Docs
+site_description: Documentation for PSChristmasTree.
+site_author: Sofiane-77
+
+repo_url: https://github.com/Sofiane-77/PSChristmasTree
+repo_name: "GitHub"
+edit_uri: "blob/main/docs/"
+edit_uri_template: "blob/main/docs/{path}"
+
+docs_dir: docs
+site_url: https://sofiane-77.github.io/PSChristmasTree/
+
+theme: readthedocs
+copyright: "PSChristmasTree is licensed under the <a href='https://github.com/Sofiane-77/PSChristmasTree/blob/main/LICENSE'>MIT license</a>"
+nav:
+  - Home: index.md
+  - Introduction:
+      - Prerequisites: prerequisites.md
+      - Installation: installation.md
+      - Getting Started: gettingstarted.md
+  - Guides:
+      - Architecture: architecture.md
+      - Configuration Guide: configuration-guide.md
+      - Configuration Contract: CONFIG-CONTRACT.md
+      - FAQ: FAQ.md
+      - How to Contribute: how-to-contribute.md
+  - Command Reference:
+      - Show-PSChristmasTree: Show-PSChristmasTree.md
+      - Set-PSChristmasTreeConfig: Set-PSChristmasTreeConfig.md
+      - Get-PSChristmasTreeConfig: Get-PSChristmasTreeConfig.md
+      - Reset-PSChristmasTreeConfig: Reset-PSChristmasTreeConfig.md

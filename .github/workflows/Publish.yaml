@@ -1,0 +1,56 @@
+name: Publish PSChristmasTree Module on PowerShell Gallery
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Existing release tag to publish (for example v1.1.0.0)"
+        required: true
+        type: string
+
+jobs:
+  publish-to-gallery:
+    name: Publish to PowerShell Gallery
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag_name) || format('refs/tags/{0}', github.event.release.tag_name) }}
+          fetch-depth: 0
+      - name: Validate release tag and manifest version
+        shell: pwsh
+        run: |
+          $tagName = if ('${{ github.event_name }}' -eq 'workflow_dispatch') { '${{ inputs.tag_name }}' } else { '${{ github.event.release.tag_name }}' }
+          if ($tagName -notmatch '^v\d+\.\d+\.\d+\.\d+$') {
+            throw "Publish workflow requires a semantic release tag in the form vX.Y.Z.W. Received tag '$tagName'."
+          }
+
+          $tagVersion = $tagName.TrimStart('v')
+          $manifestVersion = (Test-ModuleManifest -Path 'PSChristmasTree/PSChristmasTree.psd1').Version.ToString()
+
+          if ($tagVersion -ne $manifestVersion) {
+            throw "Publish version mismatch. Release tag '$tagName' resolves to '$tagVersion', but PSChristmasTree/PSChristmasTree.psd1 declares ModuleVersion '$manifestVersion'."
+          }
+
+          Write-Host "Version check passed: release tag '$tagName' matches ModuleVersion '$manifestVersion'."
+      - name: Install InvokeBuild from PowerShell Gallery
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module InvokeBuild -RequiredVersion 5.14.23 -Force
+      - name: Publish module
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: pwsh
+        run: |
+          if (-not $env:NUGET_API_KEY) {
+            throw 'NUGET_API_KEY secret is not configured.'
+          }
+
+          Invoke-Build CIRelease -Configuration "Release" -NuGetApiKey $env:NUGET_API_KEY -Verbose

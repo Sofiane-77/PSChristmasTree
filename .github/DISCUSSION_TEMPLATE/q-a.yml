@@ -1,0 +1,95 @@
+title: "[Q&A] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for using **PSChristmasTree** 🎄
+
+        Use this discussion category for:
+        - questions about usage
+        - troubleshooting
+        - unexpected behavior that does not clearly belong in a bug report
+
+        Before posting, please check the documentation, existing discussions, and open issues.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing discussions and issues
+          required: true
+        - label: I checked the documentation first
+          required: true
+        - label: I wrote a clear and descriptive title
+          required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      description: Describe your goal in a few clear sentences.
+      placeholder: |
+        Example: I want to display the tree in my PowerShell profile with custom colors.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Minimal example
+      description: Share the smallest command or script that shows your question or problem.
+      render: powershell
+      placeholder: |
+        Show-PSChristmasTree -AnimationLoopNumber 5 -Colors @("Green","Red","Yellow")
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: |
+        Example: I expected the tree to animate 5 times with the selected colors.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+      placeholder: |
+        Example: The animation stopped immediately, or the colors were ignored.
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Error message or console output
+      description: Paste the full message or output, if any.
+      render: powershell
+      placeholder: |
+        Paste the full output here.
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Share the details needed to understand or reproduce the issue.
+      placeholder: |
+        PSChristmasTree version:
+        PowerShell version:
+        Operating system:
+        Terminal:
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Add screenshots, links, notes, or anything else that may help.

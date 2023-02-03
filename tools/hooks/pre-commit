@@ -1,0 +1,7 @@
+#!/bin/sh
+# PSChristmasTree pre-commit hook
+# Delegates to a PowerShell script so logic can be versioned and edited easily.
+
+HOOK_DIR="$(dirname "$0")"
+pwsh -NoProfile -NonInteractive -File "$HOOK_DIR/pre-commit.ps1"
+exit $?

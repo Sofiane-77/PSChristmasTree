@@ -1,0 +1,38 @@
+title: "[General] "
+labels: ["general"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to the **PSChristmasTree** general discussion space.
+
+        Use this category for open-ended conversations that do not fit into:
+        - Q&A
+        - Ideas & Suggestions
+        - Show and Tell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the other discussion categories first
+          required: true
+        - label: I wrote a clear and descriptive title
+          required: true
+
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic
+      description: What would you like to discuss?
+      placeholder: |
+        Example: Future directions for PSChristmasTree, seasonal modes, or community ideas.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Add background, links, screenshots, or anything useful to start the conversation.

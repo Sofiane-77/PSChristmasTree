@@ -1,0 +1,98 @@
+name: Prepare PSChristmasTree Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: "Version component to increment"
+        required: true
+        type: choice
+        default: "Revision"
+        options:
+          - Major
+          - Minor
+          - Build
+          - Revision
+
+jobs:
+  prepare-release:
+    name: Bump version, commit and tag
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+    env:
+      CI_COMMIT_AUTHOR: github-actions[bot]
+      CI_COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Compute and apply new version
+        id: versioning
+        shell: pwsh
+        run: |
+          $manifestPath = 'PSChristmasTree/PSChristmasTree.psd1'
+          $content = Get-Content -Raw $manifestPath
+
+          $match = [regex]::Match($content, "(?<=ModuleVersion\s*=\s*')[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+          if (-not $match.Success) {
+            throw 'Could not parse ModuleVersion from PSChristmasTree.psd1.'
+          }
+
+          $current  = [version]$match.Value
+          $major    = $current.Major
+          $minor    = $current.Minor
+          $build    = $current.Build
+          $revision = $current.Revision
+
+          switch ('${{ inputs.bump_type }}') {
+            'Major'    { $major++;    $minor = 0; $build = 0; $revision = 0 }
+            'Minor'    { $minor++;    $build = 0; $revision = 0 }
+            'Build'    { $build++;    $revision = 0 }
+            'Revision' { $revision++ }
+          }
+
+          $newVersion = "$major.$minor.$build.$revision"
+          $newContent = [regex]::Replace(
+            $content,
+            "(?<=ModuleVersion\s*=\s*')[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+",
+            $newVersion,
+            1
+          )
+          Set-Content -Path $manifestPath -Value $newContent -Encoding UTF8 -NoNewline
+
+          "new_version=$newVersion" >> $env:GITHUB_OUTPUT
+          "tag_name=v$newVersion"   >> $env:GITHUB_OUTPUT
+          Write-Host "Version bumped: $($current) → $newVersion"
+
+      - name: Configure Git
+        shell: pwsh
+        run: |
+          git config --local user.name  "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --local user.email "${{ env.CI_COMMIT_EMAIL }}"
+
+      - name: Commit version bump
+        shell: pwsh
+        run: |
+          git add PSChristmasTree/PSChristmasTree.psd1
+          git commit -m ":bookmark: Prepare release v${{ steps.versioning.outputs.new_version }}"
+
+      - name: Create and push tag
+        shell: pwsh
+        run: |
+          git tag "${{ steps.versioning.outputs.tag_name }}"
+          git push origin HEAD:main
+          git push origin "${{ steps.versioning.outputs.tag_name }}"
+
+      - name: Dispatch GitHub release workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh workflow run Release.yaml \
+            --ref main \
+            -f tag_name="${{ steps.versioning.outputs.tag_name }}"

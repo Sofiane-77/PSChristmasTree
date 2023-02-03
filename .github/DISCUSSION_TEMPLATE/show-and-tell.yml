@@ -1,0 +1,58 @@
+title: "[Show and Tell] "
+labels: ["show-and-tell"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Show the community what you built with **PSChristmasTree** 🎄
+
+        Share screenshots, scripts, customizations, terminal setups, or fun holiday automation ideas.
+
+  - type: input
+    id: topic
+    attributes:
+      label: What are you sharing?
+      description: Give your post a short and clear title.
+      placeholder: Example: My PSChristmasTree PowerShell profile setup
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Tell us what you made, changed, or customized.
+      placeholder: |
+        Example: I added PSChristmasTree to my PowerShell profile and customized the colors to match my terminal theme.
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code or command
+      description: Share the command, script, or configuration you used.
+      render: powershell
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshot, GIF, or output
+      description: Add a link, paste output, or describe the result.
+
+  - type: dropdown
+    id: feedback
+    attributes:
+      label: Are you looking for feedback?
+      options:
+        - No, just sharing
+        - Yes, feedback is welcome
+        - Yes, I would like suggestions
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Add setup details, inspiration, or related links.
