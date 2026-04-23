@@ -16,11 +16,11 @@ on:
 
 jobs:
   prepare-release:
-    name: Bump version, commit and tag
+    name: Bump version and open PR
     runs-on: ubuntu-latest
     permissions:
-      actions: write
       contents: write
+      pull-requests: write
     env:
       CI_COMMIT_AUTHOR: github-actions[bot]
       CI_COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
@@ -75,24 +75,28 @@ jobs:
           git config --local user.name  "${{ env.CI_COMMIT_AUTHOR }}"
           git config --local user.email "${{ env.CI_COMMIT_EMAIL }}"
 
-      - name: Commit version bump
+      - name: Create release branch and commit version bump
         shell: pwsh
         run: |
+          $branchName = "release/bump-v${{ steps.versioning.outputs.new_version }}"
+          git checkout -b $branchName
           git add PSChristmasTree/PSChristmasTree.psd1
           git commit -m ":bookmark: Prepare release v${{ steps.versioning.outputs.new_version }}"
+          "branch_name=$branchName" >> $env:GITHUB_OUTPUT
+        id: release_branch
 
-      - name: Create and push tag
+      - name: Push release branch
         shell: pwsh
         run: |
-          git tag "${{ steps.versioning.outputs.tag_name }}"
-          git push origin HEAD:main
-          git push origin "${{ steps.versioning.outputs.tag_name }}"
+          git push --set-upstream origin "${{ steps.release_branch.outputs.branch_name }}"
 
-      - name: Dispatch GitHub release workflow
+      - name: Open pull request to main
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh workflow run Release.yaml \
-            --ref main \
-            -f tag_name="${{ steps.versioning.outputs.tag_name }}"
+          gh pr create \
+            --base main \
+            --head "${{ steps.release_branch.outputs.branch_name }}" \
+            --title ":bookmark: Prepare release v${{ steps.versioning.outputs.new_version }}" \
+            --body "This PR bumps ModuleVersion to v${{ steps.versioning.outputs.new_version }}.\n\nAfter merge to main, create and push tag ${{ steps.versioning.outputs.tag_name }} to trigger the release workflow."

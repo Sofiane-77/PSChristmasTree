@@ -1,5 +1,6 @@
 name: Run PSChristmasTree Tests
 on:
+  workflow_dispatch:
   push:
     paths:
       - "PSChristmasTree/**"
