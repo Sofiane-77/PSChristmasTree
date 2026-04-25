@@ -11,11 +11,21 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
+
+env:
+  CI_COMMIT_AUTHOR: github-actions[bot]
+  CI_COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+
+concurrency:
+  group: update-docs-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   update-docs:
     name: Regenerate platyPS markdown help
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
@@ -30,8 +40,61 @@ jobs:
         shell: pwsh
         run: ./docs/UpdateDocs.ps1 -Verbose
 
-      - name: Commit updated docs
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "docs: regenerate markdown help [skip ci]"
-          file_pattern: docs/*.md
+      - name: Check for changes
+        id: changes
+        shell: pwsh
+        run: |
+          $changed = git status --porcelain docs/
+          if ($changed) {
+            "has_changes=true" >> $env:GITHUB_OUTPUT
+          } else {
+            Write-Host "No doc changes detected, skipping PR."
+            "has_changes=false" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Configure Git
+        if: steps.changes.outputs.has_changes == 'true'
+        shell: pwsh
+        run: |
+          git config --local user.name  "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --local user.email "${{ env.CI_COMMIT_EMAIL }}"
+
+      - name: Create branch and commit updated docs
+        if: steps.changes.outputs.has_changes == 'true'
+        id: branch
+        shell: pwsh
+        run: |
+          $branchName = "docs/auto-update-${{ github.run_id }}-${{ github.run_attempt }}"
+          git checkout -b $branchName
+          git add docs/*.md
+          git commit -m ":memo: Regenerate markdown help [skip ci]"
+          git push --set-upstream origin $branchName
+          "branch_name=$branchName" >> $env:GITHUB_OUTPUT
+
+      - name: Open pull request to main
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          BRANCH_NAME="${{ steps.branch.outputs.branch_name }}"
+          SHA_SHORT="$(echo "$GITHUB_SHA" | cut -c1-7)"
+          RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          EXISTING_PR=$(gh pr list --base main --head "$BRANCH_NAME" --state open --json number --jq '.[0].number')
+
+          if [ -n "$EXISTING_PR" ] && [ "$EXISTING_PR" != "null" ]; then
+            echo "Pull request already exists: #$EXISTING_PR"
+          else
+            PR_TITLE=":memo: Regenerate markdown help from main @ $SHA_SHORT"
+            PR_BODY="Automatic platyPS markdown regeneration.
+
+            Trigger: push on main touching public commands or module manifest.
+            Source commit: $GITHUB_SHA
+            Workflow run: $RUN_URL"
+
+            gh pr create \
+              --base main \
+              --head "$BRANCH_NAME" \
+              --title "$PR_TITLE" \
+              --body "$PR_BODY"
+          fi
