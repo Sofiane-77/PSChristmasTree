@@ -47,14 +47,13 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
-      - name: Setup PowerShell module cache
-        if: contains(fromJson('["refs/heads/main"]'), github.ref)
+      - name: Restore PowerShell module cache
         id: cacher
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v4
         with:
           path: ${{ matrix.path }}
-          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS
-          restore-keys: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS
+          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-${{ hashFiles('.github/workflows/Test.yaml') }}
+          restore-keys: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-
       - name: Install PSScriptAnalyzer and Pester from PSGallery
         if: steps.cacher.outputs.cache-hit != 'true'
         shell: pwsh
@@ -63,6 +62,12 @@ jobs:
           Install-Module PSScriptAnalyzer -RequiredVersion 1.25.0 -Force
           Install-Module Pester -RequiredVersion 5.7.1 -Force
           Install-Module platyPS -RequiredVersion 0.14.2 -Force
+      - name: Save PowerShell module cache
+        if: github.ref == 'refs/heads/main' && steps.cacher.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-${{ hashFiles('.github/workflows/Test.yaml') }}
       - name: Run Pester tests
         shell: pwsh
         run: |
