@@ -7,13 +7,8 @@ updates:
       time: "14:00"
       timezone: Europe/Paris
     open-pull-requests-limit: 10
-    reviewers:
-      - "Sofiane-77"
     commit-message:
       prefix: ":lock:"
-    labels:
-      - "actions"
-      - "dependencies"
     pull-request-branch-name:
       separator: "/"
     rebase-strategy: "auto"
@@ -25,13 +20,8 @@ updates:
       time: "14:00"
       timezone: Europe/Paris
     open-pull-requests-limit: 10
-    reviewers:
-      - "Sofiane-77"
     commit-message:
       prefix: ":lock:"
-    labels:
-      - "nuget"
-      - "dependencies"
     pull-request-branch-name:
       separator: "/"
     rebase-strategy: "auto"
