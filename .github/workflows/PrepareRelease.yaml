@@ -27,7 +27,7 @@ jobs:
       CI_COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0
