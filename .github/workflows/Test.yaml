@@ -46,7 +46,7 @@ jobs:
             path: ~\Documents\PowerShell\Modules
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Restore PowerShell module cache
         id: cacher
         uses: actions/cache/restore@v6
@@ -94,7 +94,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install Windows PowerShell dependencies
         shell: powershell
         run: |
