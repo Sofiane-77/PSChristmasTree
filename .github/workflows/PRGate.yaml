@@ -1,0 +1,56 @@
+name: PR Required Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect relevant changes
+    runs-on: ubuntu-latest
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v7
+      - name: Filter changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            relevant:
+              - "PSChristmasTree/**"
+              - "Tests/**"
+              - "tools/**"
+              - "docs/UpdateDocs.ps1"
+              - "build.dependencies.psd1"
+              - "PSChristmasTree.build.ps1"
+              - ".github/workflows/Test.yaml"
+
+  run-tests:
+    name: Run tests
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
+    uses: ./.github/workflows/Test.yaml
+
+  gate:
+    name: PR Gate
+    needs: [changes, run-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify required jobs did not fail
+        run: |
+          if [[ "${{ needs.run-tests.result }}" == "failure" || "${{ needs.run-tests.result }}" == "cancelled" ]]; then
+            echo "Required tests failed"
+            exit 1
+          fi
+          echo "All required checks passed or were not needed for this change."
