@@ -1,16 +1,8 @@
 name: Run PSChristmasTree Tests
 on:
   workflow_dispatch:
+  workflow_call:
   push:
-    paths:
-      - "PSChristmasTree/**"
-      - "Tests/**"
-      - "tools/**"
-      - "docs/UpdateDocs.ps1"
-      - "build.dependencies.psd1"
-      - "PSChristmasTree.build.ps1"
-      - ".github/workflows/Test.yaml"
-  pull_request:
     branches: [main]
     paths:
       - "PSChristmasTree/**"
