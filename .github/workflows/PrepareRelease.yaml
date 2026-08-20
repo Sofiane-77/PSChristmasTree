@@ -100,4 +100,4 @@ jobs:
             --base main \
             --head "${{ steps.release_branch.outputs.branch_name }}" \
             --title ":bookmark: Prepare release v${{ steps.versioning.outputs.new_version }}" \
-            --body "This PR bumps ModuleVersion to v${{ steps.versioning.outputs.new_version }}.\n\nAfter merge to main, create and push tag ${{ steps.versioning.outputs.tag_name }} to trigger the release workflow."
+            --body $'This PR bumps ModuleVersion to v${{ steps.versioning.outputs.new_version }}.\n\nAfter merge to main, create and push tag ${{ steps.versioning.outputs.tag_name }} to trigger the release workflow.'

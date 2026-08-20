@@ -1,0 +1,51 @@
+name: Create PSChristmasTree Release Tag
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  create-tag:
+    name: Tag merged release PR
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'release/bump-v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out merged release commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref || github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate version and create tag
+        env:
+          RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
+        shell: pwsh
+        run: |
+          if (-not $env:RELEASE_PAT) {
+            throw 'RELEASE_PAT secret is not configured.'
+          }
+
+          $version = (Test-ModuleManifest -Path 'PSChristmasTree/PSChristmasTree.psd1').Version.ToString()
+          if ($version -notmatch '^\d+\.\d+\.\d+\.\d+$') {
+            throw "Invalid ModuleVersion '$version'."
+          }
+
+          $tagName = "v$version"
+          if (git ls-remote --exit-code --tags origin "refs/tags/$tagName") {
+            throw "Tag '$tagName' already exists."
+          }
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a $tagName -m "Release $tagName"
+          git push "https://x-access-token:$env:RELEASE_PAT@github.com/${{ github.repository }}.git" $tagName
