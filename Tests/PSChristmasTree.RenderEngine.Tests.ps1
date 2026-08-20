@@ -50,9 +50,9 @@ Describe 'Get-PSChristmasTreeMessageRenderModel' -Tag 'RenderEngine' {
         }
 
         $messages = @{
-            MerryChristmas = @{ Text = 'Merry'; Colors = @('Green', 'Red') }
+            MerryChristmas       = @{ Text = 'Merry'; Colors = @('Green', 'Red') }
             MessageForDevelopers = @{ Text = 'Built with {0} in {1}'; '{0}' = 'PWSH'; Color = 'Cyan' }
-            HappyNewYear = @{ Text = '2027'; Colors = @('Yellow') }
+            HappyNewYear         = @{ Text = '2027'; Colors = @('Yellow') }
         }
 
         $model = Get-PSChristmasTreeMessageRenderModel -Messages $messages -ShowMessages:$true
@@ -64,6 +64,20 @@ Describe 'Get-PSChristmasTreeMessageRenderModel' -Tag 'RenderEngine' {
         $model['HappyNewYearText'] | Should -Be '2027'
 
         Assert-MockCalled Get-DecoratedFormattedText -Times 1 -Exactly
+    }
+}
+
+Describe 'Write-Host-Colorized' -Tag 'RenderEngine' {
+    It 'consumes explicit decoration colors outside the active palette' {
+        $script:writtenColorizedText = @()
+        Mock Write-Host {
+            $script:writtenColorizedText += [string]$Object
+        }
+
+        Write-Host-Colorized -DecoratedText '#Red#|___|#' -Colors @('Green') -DefaultForegroundColor 'Green'
+
+        $script:writtenColorizedText | Should -Contain '|___|'
+        $script:writtenColorizedText | Should -Not -Contain 'Red'
     }
 }
 
@@ -83,21 +97,21 @@ Describe 'Invoke-PSChristmasTreeRenderLoop internals' -Tag 'RenderEngine' {
         Mock Set-ConsoleForegroundColor {}
 
         $effective = @{
-            TreeStyle = 'Classic'
-            CustomTreePath = ''
-            Decorations = @{}
-            HideCursor = $false
-            PlayCarol = 0
-            Colors = @('Green')
-            ShowMessages = $false
-            AnimationSpeed = 1
+            TreeStyle           = 'Classic'
+            CustomTreePath      = ''
+            Decorations         = @{}
+            HideCursor          = $false
+            PlayCarol           = 0
+            Colors              = @('Green')
+            ShowMessages        = $false
+            AnimationSpeed      = 1
             AnimationLoopNumber = 1
         }
 
         $messages = @{
-            MerryChristmas = @{ Text = 'M'; Colors = @('Green') }
+            MerryChristmas       = @{ Text = 'M'; Colors = @('Green') }
             MessageForDevelopers = @{ Text = '{0}'; '{0}' = 'X'; Color = 'Green' }
-            HappyNewYear = @{ Text = 'N'; Colors = @('Green') }
+            HappyNewYear         = @{ Text = 'N'; Colors = @('Green') }
         }
 
         Invoke-PSChristmasTreeRenderLoop -EffectiveConfig $effective -Messages $messages
