@@ -20,47 +20,48 @@
 #>
 function Write-Host-Colorized() {
     [CmdletBinding()]
-	[OutputType([System.Void])]
+    [OutputType([System.Void])]
     Param (
-            [Parameter( Mandatory = $true, Position=0 )]
-            [ValidateNotNullOrEmpty()]
-            [string]$DecoratedText,
+        [Parameter( Mandatory = $true, Position = 0 )]
+        [ValidateNotNullOrEmpty()]
+        [string]$DecoratedText,
 
-            [Parameter( Mandatory = $true, Position=1 )]
-            [ValidateNotNullOrEmpty()]
-            [Array]$Colors,
+        [Parameter( Mandatory = $true, Position = 1 )]
+        [ValidateNotNullOrEmpty()]
+        [Array]$Colors,
 
-            [Parameter( Mandatory = $true, Position=2)]
-            [ValidateNotNullOrEmpty()]
-            [string]$DefaultForegroundColor
+        [Parameter( Mandatory = $true, Position = 2)]
+        [ValidateNotNullOrEmpty()]
+        [string]$DefaultForegroundColor
     )
 
     BEGIN {
         $currentColor = $DefaultForegroundColor
-        $allColors = $Colors + 'Random' # Add random to the list of possible colors
+        $allColors = @([Enum]::GetNames([System.ConsoleColor])) + 'Random'
     }
 
     PROCESS {
         # Iterate through splitted Messages
-	    foreach ( $string in $DecoratedText.split('#') ){
-		    # If a string between #-Tags is equal to any predefined color, and is equal to the defaultcolor: set current color
-		    if ( $allColors -contains $string -and $currentColor -eq $DefaultForegroundColor ){
+        foreach ( $string in $DecoratedText.split('#') ) {
+            # If a string between #-Tags is equal to any predefined color, and is equal to the defaultcolor: set current color
+            if ( $allColors -contains $string -and $currentColor -eq $DefaultForegroundColor ) {
                 # if random chosen, we need to set a real color
                 if ($string -ieq 'random') {
                     $string = ($Colors | Get-Random)
                 }
-			    $currentColor = $string
-		    }else{
-			    # If string is a output message, than write string with current color (with no line break)
-			    Write-Host -nonewline -f $currentColor "$string"
-			    # Reset current color
-			    $currentColor = $DefaultForegroundColor
-		    }
-	    }
+                $currentColor = $string
+            }
+            else {
+                # If string is a output message, than write string with current color (with no line break)
+                Write-Host -nonewline -f $currentColor "$string"
+                # Reset current color
+                $currentColor = $DefaultForegroundColor
+            }
+        }
     }
 
     END {
-    	# Single write-host for the final line break
-	    Write-Host
+        # Single write-host for the final line break
+        Write-Host
     }
 }
