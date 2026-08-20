@@ -44,12 +44,15 @@ jobs:
         id: changes
         shell: pwsh
         run: |
-          $changed = git status --porcelain docs/
-          if ($changed) {
-            "has_changes=true" >> $env:GITHUB_OUTPUT
-          } else {
+          # Stage first so EOL normalization (CRLF/LF) happens before the diff check,
+          # otherwise git status flags false-positive changes that vanish on `git add`.
+          git add docs/*.md
+          git diff --cached --quiet -- docs/
+          if ($LASTEXITCODE -eq 0) {
             Write-Host "No doc changes detected, skipping PR."
             "has_changes=false" >> $env:GITHUB_OUTPUT
+          } else {
+            "has_changes=true" >> $env:GITHUB_OUTPUT
           }
 
       - name: Configure Git
