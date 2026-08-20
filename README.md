@@ -135,135 +135,69 @@ PSChristmasTree provides many parameters for customization and is cross-platform
 
 ## 💾 Installation
 
+For detailed instructions, see the [Documentation](https://sofiane-77.github.io/PSChristmasTree/installation/).
+
 ### From PowerShell Gallery
 
-* Install PSChristmasTree via [PowerShell Gallery](https://www.powershellgallery.com/packages/PSChristmasTree/):
-
-    ```powershell
-    Install-Module -Name PSChristmasTree
-    ```
-    > **Note** - PSChristmasTree supports PowerShell 5.0 or newer.
+```powershell
+Install-Module -Name PSChristmasTree
+```
+> **Note** - PSChristmasTree supports PowerShell 5.0 or newer.
 
 ### From Release
 
-#### Steps
-
-* Obtain the release
-    - Download the [latest release](https://github.com/Sofiane-77/PSChristmasTree/releases/latest)
-
-* Navigate to the extracted directory
-    ```powershell
-    cd path/to/PSChristmasTree
-    ```
-
-* Import the module
-    ```powershell
-  Import-Module (Get-ChildItem -Path . -Filter PSChristmasTree.psd1 -Recurse | Select-Object -First 1 -ExpandProperty FullName)
-  ```
-  > **Note** - This command finds the extracted manifest and imports it directly.
+Download the [latest release](https://github.com/Sofiane-77/PSChristmasTree/releases/latest), extract it, and run:
+```powershell
+cd path/to/PSChristmasTree
+Import-Module (Get-ChildItem -Path . -Filter PSChristmasTree.psd1 -Recurse | Select-Object -First 1 -ExpandProperty FullName)
+```
 
 ### From Source
 
-#### Steps
-* Obtain the source
-    - Clone the repository (needs git)
-    ```powershell
-    git clone https://github.com/Sofiane-77/PSChristmasTree
-    ```
-    > **Warning** - Repository ahead. Proceed at your own risk!
-
-* Navigate to the source directory
-    ```powershell
-    cd path/to/PSChristmasTree
-    ```
-
-* Import the module
-    ```powershell
-  Import-Module ./PSChristmasTree/PSChristmasTree.psd1
-  ```
+```powershell
+git clone https://github.com/Sofiane-77/PSChristmasTree
+cd PSChristmasTree
+Import-Module ./PSChristmasTree.psd1
+```
 
 ### From Docker
 
-* Run directly via a Docker image hosted publicly on [DockerHub](https://hub.docker.com/r/sofiane77/pschristmastree):
-
-    ```shell
-    docker run -it --rm sofiane77/pschristmastree
-    ```
-
-Read full installation instructions in the [documentation](https://sofiane-77.github.io/PSChristmasTree/installation/).
+```shell
+docker run -it --rm sofiane77/pschristmastree
+```
 
 ## 🏗️ Build
 
-#### Requirements
-
-* [InvokeBuild module, available on PowerShell Gallery](https://github.com/nightroman/Invoke-Build)
-* PowerShell Core 7.0 or greater on Windows/Linux/macOS
+All development workflows are consolidated via [InvokeBuild](https://github.com/nightroman/Invoke-Build) (requires PowerShell Core 7.0+). For full guidelines, see our [Contributing Guide](.github/CONTRIBUTING.md).
 
 #### Tests
-Pester Tests are located in `path/to/PSChristmasTree/Tests` folder.
+Pester tests are located in `Tests/`. Run them locally:
 
-* In the root folder of your local repository, run:
-
-    ```powershell
-    ./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Init,Test
-    ./tools/Invoke-PSChristmasTreeTests.ps1 -Output Detailed
-    ```
+```powershell
+./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Init,Test
+```
 
 #### Formatting and validation
 
-PowerShell formatting is driven by the repository PSScriptAnalyzer settings and can be auto-applied with Invoke-Formatter. The default formatting task targets the build, test, and tooling scripts to keep the workflow incremental and low-friction; pass explicit paths if you want to format module source files too.
+Formatting relies on PSScriptAnalyzer. Check everything before a PR:
 
-* Apply formatting locally:
-
-  ```powershell
-  ./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Format
-  ./tools/Invoke-PSChristmasTreeFormatter.ps1 -Path PSChristmasTree
-  ```
-
-* Check formatting, lint, tests, and generated help before opening a pull request:
-
-  ```powershell
-  ./tools/Invoke-PSChristmasTreeBuild.ps1 -Task FormatCheck,Analyze,Test,DocsCheck
-  ```
-
-* Run the Windows PowerShell 5.1 compatibility path locally on Windows:
-
-  ```powershell
-  ./tools/Invoke-PSChristmasTreeBuild.ps1 -Task TestWindowsPowerShell
-  ```
+```powershell
+./tools/Invoke-PSChristmasTreeBuild.ps1 -Task FormatCheck,Analyze,Test,DocsCheck
+```
 
 #### Coverage and benchmark
 
-The repository keeps coverage and performance measurement out of the default CI path, but exposes them through Invoke-Build for local investigation.
-
 ```powershell
-./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Coverage
-./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Benchmark
+./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Coverage,Benchmark
 ```
 
 #### Docs
 
-The command reference (`.md` files in `docs/`) is generated from comment-based help via [platyPS](https://github.com/PowerShell/platyPS).
+Command references are generated via [platyPS](https://github.com/PowerShell/platyPS).
 
-* Install platyPS (once):
-
-    ```powershell
-    Install-Module platyPS -Scope CurrentUser
-    ```
-
-* Regenerate after editing a public cmdlet:
-
-    ```powershell
-    ./docs/UpdateDocs.ps1 -Verbose
-    ```
-
-* Verify generated command help is still synchronized with the repository:
-
-  ```powershell
-  ./tools/Invoke-PSChristmasTreeBuild.ps1 -Task DocsCheck
-  ```
-
-> **Note** - The CI workflow `UpdateDocs.yaml` runs this script automatically on every push to `main` that touches a public cmdlet, and commits the updated `.md` files back to the repository.
+```powershell
+./docs/UpdateDocs.ps1 -Verbose
+```
 
 ## 🔁 Compatibility
 
@@ -298,18 +232,18 @@ Get-Help Show-PSChristmasTree -Full
 
 ## 🤝 Contributing and Community
 
-There are many ways to contribute:
+There are many ways you can contribute to PSChristmasTree:
 
 1. Star this repository.
 2. Improve the documentation.
 3. Recommend the project to others.
 4. [Report a confirmed bug](https://github.com/Sofiane-77/PSChristmasTree/issues/new/choose) by opening an issue.
 5. [Ask a question, suggest a feature, or share your setup](https://github.com/Sofiane-77/PSChristmasTree/discussions) via Discussions.
-6. Participate in [discussions](https://github.com/Sofiane-77/PSChristmasTree/discussions), review [pull requests](https://github.com/Sofiane-77/PSChristmasTree/pulls), and verify fixes or new features.
-7. Submit your own fixes or features as a pull request — discuss it first in [Discussions](https://github.com/Sofiane-77/PSChristmasTree/discussions) if the change is substantial.
-8. Submit test cases.
+6. Participate in discussions, review pull requests, and verify fixes or new features.
+7. Submit your own fixes or features as a pull request.
+8. Submit new test cases.
 
-Read through our [contributing guidelines](https://github.com/Sofiane-77/PSChristmasTree/blob/main/.github/CONTRIBUTING.md) to learn about our submission process, coding rules and more.
+Please read through our [Contributing Guidelines](.github/CONTRIBUTING.md) to learn about our submission process, coding rules, and more!
 
 <br/>
 

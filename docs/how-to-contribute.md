@@ -14,24 +14,8 @@ Contributions welcome:
 
 ## Release and quality checklist
 
-For maintainers and contributors preparing larger changes, use this quick process:
-
-1. Run tests locally before opening or updating a pull request.
-2. Run script analysis on module code.
-3. Verify generated docs are still aligned with command behavior.
-4. Keep GitHub Release notes explicit when behavior changes.
-
-### Suggested local validation commands
-
-```powershell
-./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Init,FormatCheck,Analyze,Test,DocsCheck
-```
-
-On Windows, you can also validate the Windows PowerShell 5.1 path explicitly:
-
-```powershell
-./tools/Invoke-PSChristmasTreeBuild.ps1 -Task TestWindowsPowerShell
-```
+For maintainers and contributors preparing larger changes, please refer to the detailed validation steps in the [CONTRIBUTING](../.github/CONTRIBUTING.md) guide.
+It contains the necessary commands to run local tests, script analysis, and validation (e.g., using `Invoke-PSChristmasTreeBuild.ps1`).
 
 ### Git pre-commit hook
 

@@ -6,52 +6,12 @@ This document explains how to contribute changes, report bugs, suggest ideas, an
 
 ## Code of Conduct
 
-This project is governed by the [Code of Conduct](.github/CODE_OF_CONDUCT.md). By participating, you agree to follow it.
+This project is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to follow it.
 
-## Questions and Ideas
+## Support, Questions, and Bug Reports
 
-Use GitHub Discussions for anything that is not a confirmed bug:
-
-* Questions and troubleshooting: [Q&A Discussions](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/q-a)
-* Ideas and suggestions: [Ideas and Suggestions](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/ideas-suggestions)
-* General discussion: [GitHub Discussions](https://github.com/Sofiane-77/PSChristmasTree/discussions)
-* FAQ: [PSChristmasTree FAQ](https://sofiane-77.github.io/PSChristmasTree/FAQ/)
-
-Please do not open GitHub issues for general questions or feature requests.
-
-## Reporting Bugs
-
-Before opening an issue:
-
-* Confirm the problem on the latest released version.
-* Search existing issues and discussions.
-* Reduce the problem to a minimal, reproducible example.
-
-When reporting a bug, include:
-
-* A clear and descriptive title.
-* Exact reproduction steps.
-* Expected behavior.
-* Actual behavior.
-* Full error output when relevant.
-* Your environment details, including PSChristmasTree version, PowerShell version, operating system, and terminal.
-
-Open bug reports here:
-[New issue chooser](https://github.com/Sofiane-77/PSChristmasTree/issues/new/choose)
-
-## Suggesting Enhancements
-
-Enhancement ideas are handled through GitHub Discussions, not GitHub Issues.
-
-Before posting an idea:
-
-* Search existing discussions first.
-* Explain the problem you want to solve.
-* Describe the proposed solution from a user perspective.
-* Mention alternatives you considered, if any.
-
-Open idea discussions here:
-[Ideas and Suggestions discussion category](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/ideas-suggestions)
+For questions, troubleshooting, submitting ideas, or reporting bugs, please refer to our [Support Guide](SUPPORT.md).
+It contains all the links and instructions to reach the right discussions or issue templates.
 
 ## Submitting Pull Requests
 
