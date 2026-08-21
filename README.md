@@ -111,9 +111,9 @@
 
 🧐 Are you a PowerShell user without a Christmas tree? PSChristmasTree is here to solve that problem.
 
-Everyone loves a Christmas tree, but few people can have one, and even fewer have a real one.
+Everyone loves a Christmas tree, but few people can have one and even fewer have a real one.
 
-It all started in December, when I wanted to learn PowerShell. I needed a project idea and came across a [streamer](https://www.twitch.tv/topklean) who was writing a Bash script to display a Christmas tree. Building one in PowerShell sounded fun, so here we go 🙌
+It all started in December when I wanted to learn PowerShell. I needed a project idea and came across a [streamer](https://www.twitch.tv/topklean) who was writing a Bash script to display a Christmas tree. Building one in PowerShell sounded fun so here we go 🙌
 
 <p align="right">[<a href="#%EF%B8%8F-table-of-contents">Back to ToC</a>]</p>
 
@@ -127,7 +127,7 @@ It displays an animated Christmas tree with decorations that light up in all col
     <img src="https://raw.githubusercontent.com/Sofiane-77/PSChristmasTree/main/docs/img/preview.gif">
 </div>
 
-PSChristmasTree provides many parameters for customization and is cross-platform, including optional playback of "We Wish You a Merry Christmas" during rendering.
+PSChristmasTree provides many parameters for customization and is cross-platform including optional playback of "We Wish You a Merry Christmas" during rendering.
 
 <p align="right">[<a href="#%EF%B8%8F-table-of-contents">Back to ToC</a>]</p>
 
@@ -137,7 +137,7 @@ PSChristmasTree provides many parameters for customization and is cross-platform
 
 For detailed instructions, see the [Documentation](https://sofiane-77.github.io/PSChristmasTree/installation/).
 
-### From PowerShell Gallery
+### From [PowerShell Gallery](https://www.powershellgallery.com/packages/PSChristmasTree/)
 
 ```powershell
 Install-Module -Name PSChristmasTree
@@ -146,11 +146,12 @@ Install-Module -Name PSChristmasTree
 
 ### From Release
 
-Download the [latest release](https://github.com/Sofiane-77/PSChristmasTree/releases/latest), extract it, and run:
+Download the [latest release](https://github.com/Sofiane-77/PSChristmasTree/releases/latest), extract it and run:
 ```powershell
 cd path/to/PSChristmasTree
 Import-Module (Get-ChildItem -Path . -Filter PSChristmasTree.psd1 -Recurse | Select-Object -First 1 -ExpandProperty FullName)
 ```
+> **Note** - This command finds the extracted manifest and imports it directly.
 
 ### From Source
 
@@ -162,6 +163,7 @@ Import-Module ./PSChristmasTree.psd1
 
 ### From Docker
 
+* Run directly via a Docker image hosted publicly on [DockerHub](https://hub.docker.com/r/sofiane77/pschristmastree):
 ```shell
 docker run -it --rm sofiane77/pschristmastree
 ```
@@ -238,12 +240,12 @@ There are many ways you can contribute to PSChristmasTree:
 2. Improve the documentation.
 3. Recommend the project to others.
 4. [Report a confirmed bug](https://github.com/Sofiane-77/PSChristmasTree/issues/new/choose) by opening an issue.
-5. [Ask a question, suggest a feature, or share your setup](https://github.com/Sofiane-77/PSChristmasTree/discussions) via Discussions.
-6. Participate in discussions, review pull requests, and verify fixes or new features.
+5. [Ask a question, suggest a feature or share your setup](https://github.com/Sofiane-77/PSChristmasTree/discussions) via Discussions.
+6. Participate in discussions, review pull requests and verify fixes or new features.
 7. Submit your own fixes or features as a pull request.
 8. Submit new test cases.
 
-Please read through our [Contributing Guidelines](.github/CONTRIBUTING.md) to learn about our submission process, coding rules, and more!
+Please read through our [Contributing Guidelines](.github/CONTRIBUTING.md) to learn about our submission process, coding rules and more!
 
 <br/>
 

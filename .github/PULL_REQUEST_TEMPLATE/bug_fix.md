@@ -11,4 +11,4 @@
 <!-- Briefly describe how you tested the fix. -->
 
 ## Release Notes
-<!-- Single line description of the fix for the release notes, or N/A. -->
+<!-- Single line description of the fix for the release notes or N/A. -->

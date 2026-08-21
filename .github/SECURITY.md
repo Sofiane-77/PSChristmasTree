@@ -13,14 +13,14 @@ To report a vulnerability (including publicly disclosed ones), please open a [pr
 When reporting, please include:
 * Detailed steps to reproduce (POC scripts, screenshots, captures).
 * Effects of the vulnerability and affected software/hardware configurations.
-* Potential estimation of the attack surface, or affected dependencies.
+* Potential estimation of the attack surface or affected dependencies.
 
 ## When to report a vulnerability
 * When you think PSChristmasTree has a potential security vulnerability.
 * When you suspect a potential vulnerability but are unsure if it impacts PSChristmasTree.
 * When you know of a vulnerability in another project that is used by PSChristmasTree.
   
-## Patch, Release, and Disclosure
+## Patch, Release and Disclosure
 
 1.  **Triage**: The vulnerability is examined. If rejected, a detailed reason is provided.
 2.  **Mitigation**: If acknowledged, we prioritize creating mitigating steps for affected users.

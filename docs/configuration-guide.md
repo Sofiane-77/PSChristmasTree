@@ -38,7 +38,7 @@ Wizard flow:
 8. Optional custom messages
 
 Built-in style note:
-`Classic`, `Minimal`, and `Wide` all include ornament symbol patterns in their ASCII text so decoration mapping has visible targets.
+`Classic`, `Minimal` and `Wide` all include ornament symbol patterns in their ASCII text so decoration mapping has visible targets.
 
 ### Run with Saved Config
 
@@ -111,7 +111,7 @@ Example persisted JSON:
 
 > **Note:** Decorations do not add new symbols to the tree. They map colors to ornament patterns already present in the ASCII art.
 
-> **Trunk color:** The trunk is automatically colored `Red` by default for all built-in styles and custom trees alike. Override it at runtime with `-TrunkColor`, or add the exact trunk pattern to your custom `Map` to override it persistently.
+> **Trunk color:** The trunk is automatically colored `Red` by default for all built-in styles and custom trees alike. Override it at runtime with `-TrunkColor` or add the exact trunk pattern to your custom `Map` to override it persistently.
 
 ### Color mode palette behavior
 
@@ -190,7 +190,7 @@ Resolution order:
 
 Validation is strict and centralized:
 
-- **Invalid colors are silently filtered.** Any color name that is not a valid `[System.ConsoleColor]` value (or the special keyword `random`) is removed from `Palette`, `Map`, and `Defaults` without a warning. The rest of the list is kept.
+- **Invalid colors are silently filtered.** Any color name that is not a valid `[System.ConsoleColor]` value (or the special keyword `random`) is removed from `Palette`, `Map` and `Defaults` without a warning. The rest of the list is kept.
 - **Invalid ranges fall back to defaults.** `AnimationLoopNumber` and `AnimationSpeed` must be ≥ 1; `PlayCarol` must be ≥ 0.
 - **Invalid booleans are normalized.** String values such as `"true"` / `"false"` are parsed; anything unrecognised falls back to the default.
 - **Legacy flat schema is auto-migrated.** A config file saved before v3 is detected and remapped in memory — no manual migration required.

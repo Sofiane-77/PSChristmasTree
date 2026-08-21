@@ -15,7 +15,7 @@ Contributions welcome:
 ## Release and quality checklist
 
 For maintainers and contributors preparing larger changes, please refer to the detailed validation steps in the [CONTRIBUTING](../.github/CONTRIBUTING.md) guide.
-It contains the necessary commands to run local tests, script analysis, and validation (e.g., using `Invoke-PSChristmasTreeBuild.ps1`).
+It contains the necessary commands to run local tests, script analysis and validation (e.g., using `Invoke-PSChristmasTreeBuild.ps1`).
 
 ### Git pre-commit hook
 

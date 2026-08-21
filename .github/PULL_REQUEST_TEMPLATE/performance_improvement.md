@@ -10,4 +10,4 @@
 <!-- Briefly describe how you verified the improvement and lack of regressions. -->
 
 ## Release Notes
-<!-- Single line description of the improvement for the release notes, or N/A. -->
+<!-- Single line description of the improvement for the release notes or N/A. -->

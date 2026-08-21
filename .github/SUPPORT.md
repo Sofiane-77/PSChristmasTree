@@ -4,7 +4,7 @@
 
 ## Documentation
 
-The [documentation](https://sofiane-77.github.io/PSChristmasTree/) is the primary resource for learning about PSChristmasTree. It includes getting started guides, configuration help, and command reference material.
+The [documentation](https://sofiane-77.github.io/PSChristmasTree/) is the primary resource for learning about PSChristmasTree. It includes getting started guides, configuration help and command reference material.
 
 ## Frequently Asked Questions
 
@@ -18,7 +18,7 @@ For anything that is not a confirmed bug, use [GitHub Discussions](https://githu
 | --- | --- |
 | [Q&A](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/q-a) | Usage questions, troubleshooting, unexpected behavior |
 | [Ideas & Suggestions](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/ideas-suggestions) | Feature ideas, improvements, UX suggestions |
-| [Show and Tell](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/show-and-tell) | Share your setup, scripts, and customizations |
+| [Show and Tell](https://github.com/Sofiane-77/PSChristmasTree/discussions/categories/show-and-tell) | Share your setup, scripts and customizations |
 | [General](https://github.com/Sofiane-77/PSChristmasTree/discussions) | Anything else that does not fit the above |
 
 Before opening a new discussion, search existing discussions and the documentation first. Your question may already have been answered.
@@ -38,5 +38,5 @@ Spending a little extra time framing your question leads to faster, better answe
 - Search existing discussions and the documentation before posting.
 - Define what you are trying to do and what you have already tried.
 - Provide a minimal example — the smallest script or command that demonstrates your problem.
-- Include screenshots or terminal output when helpful, and also paste the text content in a code block.
+- Include screenshots or terminal output when helpful and also paste the text content in a code block.
 - Specify your PowerShell version (`$PSVersionTable`) and operating system.

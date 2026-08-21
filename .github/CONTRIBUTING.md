@@ -2,22 +2,22 @@
 
 Thanks for taking the time to contribute.
 
-This document explains how to contribute changes, report bugs, suggest ideas, and work effectively with the project.
+This document explains how to contribute changes, report bugs, suggest ideas and work effectively with the project.
 
 ## Code of Conduct
 
 This project is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to follow it.
 
-## Support, Questions, and Bug Reports
+## Support, Questions and Bug Reports
 
-For questions, troubleshooting, submitting ideas, or reporting bugs, please refer to our [Support Guide](SUPPORT.md).
+For questions, troubleshooting, submitting ideas or reporting bugs, please refer to our [Support Guide](SUPPORT.md).
 It contains all the links and instructions to reach the right discussions or issue templates.
 
 ## Submitting Pull Requests
 
 Before opening a pull request:
 
-1. Search existing issues, discussions, and pull requests to avoid duplicate work.
+1. Search existing issues, discussions and pull requests to avoid duplicate work.
 1. Make sure the change has the right prior context:
    Bug fixes should be linked to a bug report.
    Feature changes should be linked to a maintainer-endorsed discussion.
