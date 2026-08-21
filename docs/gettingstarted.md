@@ -82,7 +82,7 @@ Show-PSChristmasTree -UICulture fr-FR
 Set-PSChristmasTreeConfig
 ```
 
-Run the command with no parameters to open the interactive wizard, then run `Show-PSChristmasTree` with your saved defaults.
+Run the command with no parameters to open the interactive wizard then run `Show-PSChristmasTree` with your saved defaults.
 
 ```powershell
 # Hide the cursor while the tree is displayed

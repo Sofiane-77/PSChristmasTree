@@ -14,4 +14,4 @@
 <!-- Briefly describe how you tested the feature and ensured no regressions. -->
 
 ## Release Notes
-<!-- Single line description of the feature for the release notes, or N/A. -->
+<!-- Single line description of the feature for the release notes or N/A. -->

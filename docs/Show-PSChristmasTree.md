@@ -15,7 +15,7 @@ Show-PSChristmasTree [[-AnimationLoopNumber] <Int32>] [[-AnimationSpeed] <Int32>
 ```
 
 ## DESCRIPTION
-Displays an animated Christmas tree with configurable colors, ornament-pattern illumination, messages,
+Displays an animated Christmas tree with configurable colors, ornament-pattern illumination, messages
 and audio.
 
 Effective configuration is resolved in this order:
@@ -95,7 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### -ColorMode
-Color behavior mode: Multicolor, Single, or Palette.
+Color behavior mode: Multicolor, Single or Palette.
 
 ```yaml
 Type: String
@@ -215,7 +215,7 @@ Accept wildcard characters: False
 ```
 
 ### -TreeStyle
-Tree style: Classic, Minimal, Wide, or Custom.
+Tree style: Classic, Minimal, Wide or Custom.
 Built-in styles include ornament symbol patterns that can be illuminated by decoration mapping.
 
 ```yaml
@@ -322,7 +322,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

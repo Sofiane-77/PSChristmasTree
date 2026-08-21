@@ -5,7 +5,7 @@
 PSChristmasTree keeps a simple product scope (animated terminal tree) while applying production-grade engineering practices:
 
 - deterministic configuration normalization
-- clear separation of concerns between orchestration, domain logic, and terminal I/O
+- clear separation of concerns between orchestration, domain logic and terminal I/O
 - testable logic in pure or near-pure helpers
 - predictable release and CI quality gates
 
