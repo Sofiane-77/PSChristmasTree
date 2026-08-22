@@ -18,7 +18,7 @@ All configuration values are guaranteed to be valid for use with Show-PSChristma
 If no configuration has been saved, $null is returned.
 
 The returned hashtable follows the structured configuration schema:
-ConfigVersion, Language, Tree, Decorations, Colors, Display, Audio and Messages.
+ConfigVersion, Language, Tree, Decorations, Colors, Display, Audio, and Messages.
 
 ## EXAMPLES
 
