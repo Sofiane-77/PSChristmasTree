@@ -57,6 +57,7 @@ function Invoke-PSChristmasTreeRenderLoop() {
             if ($currentBufferSize -ine (Get-BufferSizeWidth)) {
                 $christmasTree = Get-ChristmasTree -Style $treeStyle -CustomTreePath $customTreePath
                 $renderedTree = Get-PSChristmasTreeDecoratedTree -TreeData $christmasTree -DecorationMap $decorations
+                $messageModel = Get-PSChristmasTreeMessageRenderModel -Messages $Messages -ShowMessages ([bool]$EffectiveConfig['ShowMessages'])
                 $currentBufferSize = Get-BufferSizeWidth
 
                 if ($EffectiveConfig['HideCursor']) {
