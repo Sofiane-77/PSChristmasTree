@@ -163,7 +163,7 @@ Import-Module ./PSChristmasTree.psd1
 
 ### From Docker
 
-* Run directly via a Docker image hosted publicly on [DockerHub](https://hub.docker.com/r/sofiane77/pschristmastree):
+Run directly via a Docker image hosted publicly on [DockerHub](https://hub.docker.com/r/sofiane77/pschristmastree):
 ```shell
 docker run -it --rm sofiane77/pschristmastree
 ```

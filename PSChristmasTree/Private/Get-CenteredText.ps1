@@ -26,7 +26,8 @@ function Get-CenteredText() {
     }
 
     PROCESS {
-        foreach ($line in $Text -split [System.Environment]::NewLine) {
+        # Split on any line ending style (CRLF, LF or CR) since here-string source line endings may not match [System.Environment]::NewLine on the current OS
+        foreach ($line in $Text -split "`r`n|`r|`n") {
             $line = $line.Trim()
             $bufferWidth = [int]$Host.UI.RawUI.BufferSize.Width
             $leftPadding = [Math]::Max(0, [Math]::Floor(($bufferWidth - $line.Length) / 2))
@@ -35,6 +36,6 @@ function Get-CenteredText() {
     }
 
     END {
-        return $CenteredString -Join [System.Environment]::NewLine # Join each line to return a string
+        return $CenteredString -Join "`n" # Join each line to return a string
     }
 }
