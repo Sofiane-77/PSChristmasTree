@@ -8,7 +8,7 @@
     RootModule           = 'PSChristmasTree.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.2.2.0'
+    ModuleVersion        = '1.2.3.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @('Desktop', 'Core')
