@@ -14,9 +14,40 @@ function Stop-PSChristmasTreeCarolSession() {
     $worker = $Session['Worker']
     $runspace = $Session['Runspace']
     $result = $Session['AsyncResult']
+    $processState = $Session['ProcessState']
     $Session['Worker'] = $null
     $Session['Runspace'] = $null
     $Session['AsyncResult'] = $null
+
+    if ($null -ne $processState) {
+        $process = $null
+        $lockTaken = $false
+        try {
+            [System.Threading.Monitor]::Enter($processState['Sync'])
+            $lockTaken = $true
+            $processState['Stopping'] = $true
+            $process = $processState['Process']
+        }
+        catch {
+            Write-Verbose "Carol process state update failed: $($_.Exception.Message)"
+        }
+        finally {
+            if ($lockTaken) {
+                [System.Threading.Monitor]::Exit($processState['Sync'])
+            }
+        }
+
+        if ($null -ne $process) {
+            try {
+                if (-not $process.HasExited) {
+                    $process.Kill()
+                }
+            }
+            catch {
+                Write-Verbose "Carol process termination failed: $($_.Exception.Message)"
+            }
+        }
+    }
 
     if ($null -ne $worker) {
         try {
@@ -43,6 +74,21 @@ function Stop-PSChristmasTreeCarolSession() {
         catch {
             Write-Verbose "Carol worker disposal failed: $($_.Exception.Message)"
         }
+    }
+
+    if ($null -ne $processState -and $null -ne $processState['Process']) {
+        $process = $processState['Process']
+        try {
+            if (-not $process.HasExited) {
+                $process.Kill()
+            }
+        }
+        catch {
+            Write-Verbose "Carol process final termination failed: $($_.Exception.Message)"
+        }
+        try { $process.Close() } catch { Write-Verbose "Carol process close failed: $($_.Exception.Message)" }
+        try { $process.Dispose() } catch { Write-Verbose "Carol process disposal failed: $($_.Exception.Message)" }
+        $processState['Process'] = $null
     }
 
     if ($null -ne $runspace) {

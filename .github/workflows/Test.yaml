@@ -44,8 +44,8 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: ${{ matrix.path }}
-          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-${{ hashFiles('.github/workflows/Test.yaml') }}
-          restore-keys: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-
+          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-InvokeBuild-${{ hashFiles('.github/workflows/Test.yaml') }}
+          restore-keys: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-InvokeBuild-
       - name: Install PSScriptAnalyzer and Pester from PSGallery
         if: steps.cacher.outputs.cache-hit != 'true'
         shell: pwsh
@@ -54,12 +54,13 @@ jobs:
           Install-Module PSScriptAnalyzer -RequiredVersion 1.25.0 -Force
           Install-Module Pester -RequiredVersion 5.7.1 -Force
           Install-Module platyPS -RequiredVersion 0.14.2 -Force
+          Install-Module InvokeBuild -RequiredVersion 5.14.23 -Force
       - name: Save PowerShell module cache
         if: github.ref == 'refs/heads/main' && steps.cacher.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
         with:
           path: ${{ matrix.path }}
-          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-${{ hashFiles('.github/workflows/Test.yaml') }}
+          key: ${{ runner.os }}-PSScriptAnalyzer-Pester-platyPS-InvokeBuild-${{ hashFiles('.github/workflows/Test.yaml') }}
       - name: Run Pester tests
         shell: pwsh
         run: |
@@ -72,6 +73,17 @@ jobs:
         shell: pwsh
         run: |
           ./tools/Test-PSChristmasTreeDocsSync.ps1
+      - name: Build and validate packaged module
+        shell: pwsh
+        run: |
+          ./tools/Invoke-PSChristmasTreeBuild.ps1 -Task Build
+          $version = (Test-ModuleManifest ./PSChristmasTree/PSChristmasTree.psd1).Version.ToString()
+          $modulePath = Join-Path $PWD ('Build/Debug/PSChristmasTree/' + $version)
+          Import-Module (Join-Path $modulePath 'PSChristmasTree.psd1') -Force
+          $assetPath = & (Get-Module PSChristmasTree) { Get-PSChristmasTreeCarolAssetPath }
+          if ($assetPath -ne (Join-Path $modulePath 'assets/carol.wav') -or -not (Test-Path -LiteralPath $assetPath)) {
+            throw 'Built module cannot resolve assets/carol.wav.'
+          }
       - name: Upload PowerShell 7 test results
         if: always()
         uses: actions/upload-artifact@v7

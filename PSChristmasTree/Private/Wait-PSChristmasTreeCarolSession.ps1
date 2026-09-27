@@ -14,6 +14,12 @@ function Wait-PSChristmasTreeCarolSession() {
             $result = $Session['AsyncResult']
             $Session['AsyncResult'] = $null
             $null = $Session['Worker'].EndInvoke($result)
+            if ($null -ne $Session['ProcessState']) {
+                $warnings = $Session['Worker'].Streams.Warning
+                if ($warnings.Count -gt 0) {
+                    Write-Warning $warnings[0].Message
+                }
+            }
         }
     }
     catch {

@@ -45,6 +45,7 @@ Enter-Build {
 	$Script:ModuleSourcePrivatePath = Join-Path -Path $ModuleSourcePath -ChildPath 'Private'
 	$Script:ModuleSourcePublicPath = Join-Path -Path $ModuleSourcePath -ChildPath 'Public'
 	$Script:ModuleSourceLocalesPath = Join-Path -Path $ModuleSourcePath -ChildPath 'locales'
+	$Script:ModuleSourceAssetsPath = Join-Path -Path $ModuleSourcePath -ChildPath 'assets'
 
 	$Script:NuspecPath = Join-Path -Path $ModuleSourcePath -ChildPath "$ModuleName.nuspec"
 	$Script:BuildOutputPath = Join-Path -Path $BuildRoot -ChildPath 'Build'
@@ -293,6 +294,15 @@ task Build {
 		Write-Warning -Message "Failed copying locales inside build Module directory"
 	}
 	
+	$carolAsset = Join-Path -Path $ModuleSourceAssetsPath -ChildPath 'carol.wav'
+	if (-not (Test-Path -LiteralPath $carolAsset -PathType Leaf)) {
+		throw "Required carol asset is missing: $carolAsset"
+	}
+	Copy-Item -Path $ModuleSourceAssetsPath -Destination $ModuleBuildPath -Recurse -ErrorAction Stop
+	if (-not (Test-Path -LiteralPath (Join-Path -Path $ModuleBuildPath -ChildPath 'assets/carol.wav') -PathType Leaf)) {
+		throw 'The built module is missing assets/carol.wav.'
+	}
+
 	try {
 		Copy-Item -Path (Join-Path -Path $BuildRoot -ChildPath 'LICENSE') -Destination (Join-Path -Path $ModuleBuildPath -ChildPath 'License.txt')
 	}

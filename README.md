@@ -205,10 +205,10 @@ Command references are generated via [platyPS](https://github.com/PowerShell/pla
 
 | Edition | Minimum Version | Tested Versions | Status |
 |---|---|---|---|
-| Windows PowerShell | 5.0 | 5.0, 5.1 | ✅ |
+| Windows PowerShell | 5.1 | 5.1 | ✅ |
 | PowerShell Core | 7.0 | 7.2, 7.4, 7.5 | ✅ |
 
-> **Note** - Audio playback (`-PlayCarol`) requires Windows. All other features are cross-platform (Windows, Linux, macOS).
+> **Audio:** `-PlayCarol 0` disables music; a positive value plays that many repetitions. Windows uses `Console.Beep`, macOS uses built-in `afplay`, and Linux tries an available `pw-play`, `paplay`, then `aplay`. The module installs no additional audio dependency. If no working Linux player is available, the tree continues without music.
 
 <p align="right">[<a href="#%EF%B8%8F-table-of-contents">Back to ToC</a>]</p>
 

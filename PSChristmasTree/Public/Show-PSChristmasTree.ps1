@@ -39,7 +39,7 @@
 	Merge built-in ornament-pattern colors with custom symbol-pattern colors when using custom mode.
 
   .Parameter PlayCarol
-	Number of times to loop the carol.
+	Number of carol repetitions (0 = disabled). Audio uses Console.Beep on Windows, afplay on macOS, and an available pw-play, paplay, or aplay on Linux.
 
   .Parameter UICulture
 	UI culture used to load localized messages (for example en-US, fr-FR).

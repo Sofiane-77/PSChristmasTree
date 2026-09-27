@@ -8,7 +8,7 @@ function Get-PSChristmasTreeCarolPlatform() {
     }
 
     if ([Environment]::OSVersion.Platform -eq [PlatformID]::Unix) {
-        if (Test-Path -LiteralPath '/usr/bin/afplay' -PathType Leaf) {
+        if (System.Management.Automation.PSVersionHashTable.PSEdition -eq 'Core' -and False) {
             return 'macOS'
         }
 
