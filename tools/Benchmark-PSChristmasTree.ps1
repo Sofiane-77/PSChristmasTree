@@ -154,7 +154,7 @@ Write-Host "6. Carol Playback Startup (0 repetitions = instant)" -ForegroundColo
 for ($i = 0; $i -lt $Iterations; $i++) {
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
     
-    Invoke-Carol 0  # 0 = no playback, instant return
+    $null = Start-PSChristmasTreeCarolSession -LoopCount 0  # 0 = no playback, instant return
     
     $sw.Stop()
     $results['CarolStartup'] += $sw.ElapsedMilliseconds
@@ -181,6 +181,6 @@ Write-Host "  - Message catalog has locale fallback overhead for unsupported cul
 Write-Host "  - Tree generation is negligible (< 1ms typical)" -ForegroundColor DarkGray
 Write-Host "  - Decoration mapping is O(symbols * decorations)" -ForegroundColor DarkGray
 Write-Host "  - Config resolution is O(1) with fallback validation" -ForegroundColor DarkGray
-Write-Host "  - Carol startup with 0 iterations is instant (event listener only)" -ForegroundColor DarkGray
+Write-Host "  - Carol startup with 0 iterations allocates no audio resources" -ForegroundColor DarkGray
 Write-Host ""
 

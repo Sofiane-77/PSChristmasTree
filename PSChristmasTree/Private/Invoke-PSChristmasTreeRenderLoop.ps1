@@ -9,6 +9,8 @@ function Invoke-PSChristmasTreeRenderLoop() {
         [hashtable]$Messages
     )
 
+    $audioSession = $null
+    $renderCompleted = $false
     $currentColor = $null
     $currentBufferSize = $null
     $currentCursorSize = $null
@@ -50,7 +52,9 @@ function Invoke-PSChristmasTreeRenderLoop() {
             Hide-CursorSize
         }
 
-        Invoke-Carol $EffectiveConfig['PlayCarol']
+        if ($EffectiveConfig['PlayCarol'] -gt 0) {
+            $audioSession = Start-PSChristmasTreeCarolSession -LoopCount $EffectiveConfig['PlayCarol']
+        }
 
         $i = 0
         do {
@@ -77,14 +81,30 @@ function Invoke-PSChristmasTreeRenderLoop() {
             Start-Sleep -Milliseconds $EffectiveConfig['AnimationSpeed']
             $i++
         } until ($i -eq $EffectiveConfig['AnimationLoopNumber'])
+        $renderCompleted = $true
     }
     finally {
-        if (-not [string]::IsNullOrWhiteSpace([string]$currentCursorSize)) {
-            Set-CursorSize $currentCursorSize
+        try {
+            if ($null -ne $audioSession) {
+                if ($renderCompleted) {
+                    Wait-PSChristmasTreeCarolSession -Session $audioSession
+                }
+                else {
+                    Stop-PSChristmasTreeCarolSession -Session $audioSession
+                }
+            }
         }
-
-        if ($null -ne $currentColor) {
-            Set-ConsoleForegroundColor $currentColor
+        finally {
+            try {
+                if (-not [string]::IsNullOrWhiteSpace([string]$currentCursorSize)) {
+                    Set-CursorSize $currentCursorSize
+                }
+            }
+            finally {
+                if ($null -ne $currentColor) {
+                    Set-ConsoleForegroundColor $currentColor
+                }
+            }
         }
     }
 }

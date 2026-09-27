@@ -193,7 +193,8 @@ Accept wildcard characters: False
 ```
 
 ### -PlayCarol
-Number of times to loop the "We Wish You a Merry Christmas" carol (0 = disabled)
+Number of times to play the "We Wish You a Merry Christmas" carol (0 = disabled).
+Playback uses Console.Beep on Windows, afplay on macOS, and an available pw-play, paplay, or aplay on Linux.
 
 ```yaml
 Type: Int32

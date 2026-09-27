@@ -58,9 +58,11 @@ These helpers transform domain objects into display-ready payloads and are unit-
 - cursor and foreground color lifecycle
 - terminal clear/write calls
 - resize-aware re-centering
-- optional asynchronous carol playback
+- optional asynchronous carol playback with explicit Start/Wait/Stop session ownership
 
 The render loop delegates preparation logic to the render helpers to keep I/O code focused and reviewable.
+
+The render loop owns the carol session. It waits for playback after normal rendering and stops it on errors or interruption. The score is shared by Windows playback and the development-time WAV generator; macOS and Linux play the packaged WAV through native or available system players.
 
 ## Key Invariants
 

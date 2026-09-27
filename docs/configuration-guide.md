@@ -172,6 +172,12 @@ Set-PSChristmasTreeConfig -Config @{
 }
 ```
 
+### Carol playback
+
+`Audio.PlayCarol` and `Show-PSChristmasTree -PlayCarol` use the same count: `0` disables music, and a positive value plays that many repetitions. The command waits for its music to finish before returning.
+
+Windows uses `Console.Beep`. macOS uses the built-in `afplay`. Linux tries available players in this order: `pw-play`, `paplay`, `aplay`, and keeps the first player that successfully completes playback. The module installs no additional audio dependency. If no supported working player is available, the tree continues without music.
+
 ### Runtime Overrides
 
 ```powershell

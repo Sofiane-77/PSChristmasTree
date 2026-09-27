@@ -43,7 +43,7 @@
     Controls whether built-in ornament-pattern colors are merged with custom symbol-pattern colors.
 
  .Parameter PlayCarol
-  Number of times to loop the "We Wish You a Merry Christmas" carol (0 = disabled)
+  Number of times to play the "We Wish You a Merry Christmas" carol (0 = disabled). Playback uses Console.Beep on Windows, afplay on macOS, and an available pw-play, paplay, or aplay on Linux.
 
  .Parameter UICulture
   Language code for localized messages (e.g. en-US, fr-FR)
