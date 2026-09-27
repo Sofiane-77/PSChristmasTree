@@ -150,6 +150,21 @@ task TestWindowsPowerShell -if($IsWindows) {
 }
 
 task Build {
+    function Add-PSChristmasTreeBuildContent {
+        param([string]$Path, [string]$Value)
+
+        for ($attempt = 0; $attempt -lt 10; $attempt++) {
+            try {
+                Add-Content -Path $Path -Value $Value -ErrorAction Stop
+                return
+            }
+            catch [System.IO.IOException] {
+                if ($attempt -eq 9) { throw }
+                # File indexing can briefly lock the generated module between appends.
+                Start-Sleep -Milliseconds 100
+            }
+        }
+    }
 
 	Remove-Item $ModuleBuildPath -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -188,7 +203,7 @@ task Build {
 	}
 	Write-Verbose -Message "Building the .psm1 file"
 	Write-Verbose -Message "Appending Public Functions"
-	Add-Content -Path $ModuleBuildFile -Value "### --- PUBLIC FUNCTIONS --- ###"
+	Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "### --- PUBLIC FUNCTIONS --- ###"
 	foreach ($function in $publicFunctions.Name) {
 		try {
 			Write-Verbose -Message "Updating the .psm1 file with function: $($Function)"
@@ -199,8 +214,8 @@ task Build {
 				$regex = [Regex] "(?<=\).){(?=\s)"
 				$content = $regex.Replace($contentWithoutComment, [string]::Join([System.Environment]::Newline, '{', $comment), 1)
 			}
-			Add-Content -Path $ModuleBuildFile -Value "#region - $Function"
-			Add-Content -Path $ModuleBuildFile -Value $content
+			Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "#region - $Function"
+			Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value $content
 			if ($exportAlias.IsPresent) {
 				$aliasSwitch = $false
 				$sel = Select-String -Path "$ModuleSourcePublicPath\$($Function)" -Pattern "CmdletBinding" -Context 0, 1
@@ -209,19 +224,19 @@ task Build {
 					if ($S -match "Alias") {
 						$Alias = (($S.split(":")[2]).split("(")[1]).split(")")[0]
 						Write-Verbose -Message "Exporting Alias: $($Alias) to Function: $($Function)"
-						Add-Content -Path $ModuleBuildFile -Value "Export-ModuleMember -Function $(($Function.split('.')[0]).ToString()) -Alias $Alias"
+						Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "Export-ModuleMember -Function $(($Function.split('.')[0]).ToString()) -Alias $Alias"
 						$AliasSwitch = $true
 					}
 				}
 				if ($AliasSwitch -eq $false) {
 					Write-Verbose -Message "No alias was found in function: $($Function))"
-					Add-Content -Path $ModuleBuildFile -Value "Export-ModuleMember -Function $(($Function.split('.')[0]).ToString())"
+					Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "Export-ModuleMember -Function $(($Function.split('.')[0]).ToString())"
 				}
 			}
 			else {
-				Add-Content -Path $ModuleBuildFile -Value "Export-ModuleMember -Function $(($Function.split('.')[0]).ToString())"
+				Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "Export-ModuleMember -Function $(($Function.split('.')[0]).ToString())"
 			}
-			Add-Content -Path $ModuleBuildFile -Value "#endregion"
+			Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "#endregion"
 		}
 		catch {
 			throw "Failed adding content to .psm1 for function: $($Function)"
@@ -229,7 +244,7 @@ task Build {
 	}
 
 	Write-Verbose -Message "Appending Private functions"
-	Add-Content -Path $ModuleBuildFile -Value "### --- PRIVATE FUNCTIONS --- ###"
+	Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "### --- PRIVATE FUNCTIONS --- ###"
 	foreach ($function in $privateFunctions.Name) {
 		try {
 			Write-Verbose -Message "Updating the .psm1 file with function: $($function)"
@@ -240,9 +255,9 @@ task Build {
 				$regex = [Regex] "(?<=\).){(?=\s)"
 				$content = $regex.Replace($contentWithoutComment, [string]::Join([System.Environment]::Newline, '{', $comment), 1)
 			}
-			Add-Content -Path $ModuleBuildFile -Value "#region - $function"
-			Add-Content -Path $ModuleBuildFile -Value $content
-			Add-Content -Path $ModuleBuildFile -Value "#endregion"
+			Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "#region - $function"
+			Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value $content
+			Add-PSChristmasTreeBuildContent -Path $ModuleBuildFile -Value "#endregion"
 		}
 		catch {
 			throw "Failed adding content to .psm1 for function: $($function)"

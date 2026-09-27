@@ -89,7 +89,7 @@ Describe 'Invoke-PSChristmasTreeRenderLoop internals' -Tag 'RenderEngine' {
         Mock Get-ChristmasTree { return @{ tree = 'body'; trunk = 'trunk' } }
         Mock Get-PSChristmasTreeDecoratedTree { return 'decorated-tree' }
         Mock Get-PSChristmasTreeMessageRenderModel { return @{ Show = $false } }
-        Mock Invoke-Carol {}
+        Mock Start-PSChristmasTreeCarolSession {}
         Mock Clear-Host {}
         Mock Write-Host-Colorized {}
         Mock Start-Sleep {}
@@ -118,7 +118,69 @@ Describe 'Invoke-PSChristmasTreeRenderLoop internals' -Tag 'RenderEngine' {
 
         Assert-MockCalled Get-PSChristmasTreeDecoratedTree -Times 1 -Exactly
         Assert-MockCalled Get-PSChristmasTreeMessageRenderModel -Times 1 -Exactly
+        Assert-MockCalled Start-PSChristmasTreeCarolSession -Times 0 -Exactly
         Assert-MockCalled Set-CursorSize -Times 1 -Exactly
+        Assert-MockCalled Set-ConsoleForegroundColor -Times 1 -Exactly
+    }
+}
+
+
+Describe 'Render loop audio ownership' -Tag 'RenderEngine' {
+    BeforeEach {
+        Mock Get-ConsoleForegroundColor { 'Gray' }
+        Mock Get-BufferSizeWidth { 120 }
+        Mock Get-CursorSize { 25 }
+        Mock Get-ChristmasTree { @{ tree = 'body'; trunk = 'trunk' } }
+        Mock Get-PSChristmasTreeDecoratedTree { 'decorated-tree' }
+        Mock Get-PSChristmasTreeMessageRenderModel { @{ Show = $false } }
+        Mock Start-PSChristmasTreeCarolSession { @{ Disposed = $false } }
+        Mock Wait-PSChristmasTreeCarolSession {}
+        Mock Stop-PSChristmasTreeCarolSession {}
+        Mock Clear-Host {}
+        Mock Write-Host-Colorized {}
+        Mock Start-Sleep {}
+        Mock Set-CursorSize {}
+        Mock Set-ConsoleForegroundColor {}
+
+        $script:audioConfig = @{
+            TreeStyle = 'Classic'
+            CustomTreePath = ''
+            Decorations = @{}
+            HideCursor = $false
+            PlayCarol = 1
+            Colors = @('Green')
+            ShowMessages = $false
+            AnimationSpeed = 1
+            AnimationLoopNumber = 1
+        }
+    }
+
+    It 'waits for owned audio after normal rendering' {
+        Invoke-PSChristmasTreeRenderLoop -EffectiveConfig $script:audioConfig -Messages @{}
+        Assert-MockCalled Start-PSChristmasTreeCarolSession -Times 1 -Exactly
+        Assert-MockCalled Wait-PSChristmasTreeCarolSession -Times 1 -Exactly
+        Assert-MockCalled Stop-PSChristmasTreeCarolSession -Times 0 -Exactly
+    }
+
+    It 'stops audio when rendering fails' {
+        Mock Clear-Host { throw 'render failed' }
+        { Invoke-PSChristmasTreeRenderLoop -EffectiveConfig $script:audioConfig -Messages @{} } | Should -Throw
+        Assert-MockCalled Stop-PSChristmasTreeCarolSession -Times 1 -Exactly
+        Assert-MockCalled Set-CursorSize -Times 1 -Exactly
+        Assert-MockCalled Set-ConsoleForegroundColor -Times 1 -Exactly
+    }
+
+    It 'restores terminal state even when audio cleanup fails' {
+        Mock Wait-PSChristmasTreeCarolSession { throw 'audio cleanup failed' }
+        { Invoke-PSChristmasTreeRenderLoop -EffectiveConfig $script:audioConfig -Messages @{} } | Should -Throw
+        Assert-MockCalled Set-CursorSize -Times 1 -Exactly
+        Assert-MockCalled Set-ConsoleForegroundColor -Times 1 -Exactly
+    }
+
+    It 'attempts color restoration when cursor restoration fails' {
+        Mock Set-CursorSize { throw 'cursor restore failed' }
+        { Invoke-PSChristmasTreeRenderLoop -EffectiveConfig $script:audioConfig -Messages @{} } | Should -Throw
+        Assert-MockCalled Wait-PSChristmasTreeCarolSession -Times 1 -Exactly
         Assert-MockCalled Set-ConsoleForegroundColor -Times 1 -Exactly
     }
 }
